@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Home - myapp</title>
+		<link rel="stylesheet" type="text/css" href="{{ media_url }}/home.css" media="all"/>
+	</head>
+	<body>
+		<header>
+			Hello {{ request.user }}! <a href="{{ create_logout_url() }}">ログアウト</a>
+		</header>
+		<nav>
+		</nav>
+		<section>
+			<article>
+				<h1>このサイトについて</h1>
+				<h2>HTML5とCSS3による豊かな表現</h2>
+			</article>
+			<article>
+			<h1>さらに別の記事</h1>
+			</article>
+		</section>
+		<footer>
+			<p>This site is licensed under a <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">Creative Commons Attribution 3.0 License</a></p>
+		</footer>
+		</body>
+</html>
+

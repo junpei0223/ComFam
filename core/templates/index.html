@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Top Page - myapp</title>
+		<link rel="stylesheet" type="text/css" href="{{ media_url }}/index.css" media="all"/>
+	</head>
+	<body>
+		<header>
+			{% from "auth/macros.html" import render_loginbox with context %}
+			<div>
+			{% if request.user.is_anonymous() %}
+				{{ render_loginbox() }}
+			{% else %}
+				Hello {{ request.user }}! <a href="{{ create_logout_url() }}">ログアウト</a>
+			{% endif %}
+			</div>
+		</header>
+		<!--
+			{% if msg %}
+				<p>{{ msg }}</p>
+			{% endif %}
+		-->
+		<nav>
+			<a href=#new_user id="new_user">
+				<h1>新規ユーザー登録</h1>
+			</a>
+			{% if request.user.is_anonymous() %}
+				{{ form()|safe }}
+			{% endif %}
+		</nav>
+		<section>
+			<article>
+				<h1>このサイトについて</h1>
+				<p>あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモーリオ市、郊外のぎらぎら光る草の波。あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモーリオ市、郊外のぎらぎら光る草の波。あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモーリオ市、郊外のぎらぎら光る草の波。</p>
+				<h2>HTML5とCSS3による豊かな表現</h2>
+				<p>あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモーリオ市、郊外のぎらぎら光る草の波。あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモーリオ市、郊外のぎらぎら光る草の波。あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモーリオ市、郊外のぎらぎら光る草の波。</p>
+			</article>
+			<article>
+			<h1>さらに別の記事</h1>
+			<p>あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモーリオ市、郊外のぎらぎら光る草の波。あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモーリオ市、郊外のぎらぎら光る草の波。あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモーリオ市、郊外のぎらぎら光る草の波。</p>
+			</article>
+		</section>
+		<!--
+					<table>
+						<tr><th>ユーザー名</th></tr>
+						{% for user in users %}
+						<tr><td>{{user.user_name}}</td></tr>
+						{% endfor %}
+					<table>
+		-->
+		<footer>
+			<p>This site is licensed under a <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">Creative Commons Attribution 3.0 License</a></p>
+		</footer>
+		</body>
+</html>
+

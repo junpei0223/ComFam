@@ -1,0 +1,24 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+DatastoreUser	models.py	/^from kay.auth.models import DatastoreUser$/;"	i
+DuplicateKeyError	views.py	/^from kay.auth import (create_new_user, DuplicateKeyError)$/;"	i
+MyUser	models.py	/^class MyUser(DatastoreUser):$/;"	c
+MyUser	views.py	/^from models import MyUser$/;"	i
+MyUserForm	views.py	/^class MyUserForm(forms.Form):$/;"	c
+ValidationError	views.py	/^from kay.utils.validators import ValidationError$/;"	i
+address	models.py	/^	address = db.TextProperty(u'住所', required=True)$/;"	v	class:MyUser
+address	views.py	/^    address = forms.TextField(u'住所', required=True)$/;"	v	class:MyUserForm
+context_validate	views.py	/^    def context_validate(self, data):$/;"	m	class:MyUserForm
+create_new_user	views.py	/^from kay.auth import (create_new_user, DuplicateKeyError)$/;"	i
+db	models.py	/^from google.appengine.ext import db$/;"	i
+forms	views.py	/^from kay.utils import forms$/;"	i
+index	views.py	/^def index(request):$/;"	f
+password	views.py	/^    password = forms.TextField(u'パスワード',$/;"	v	class:MyUserForm
+password_confirm	views.py	/^    password_confirm = forms.TextField(u'パスワードの再入力',$/;"	v	class:MyUserForm
+render_to_response	views.py	/^from kay.utils import render_to_response$/;"	i
+user_name	views.py	/^    user_name = forms.TextField(u'ユーザー名', required=True)$/;"	v	class:MyUserForm
+view_groups	urls.py	/^view_groups = [$/;"	v
