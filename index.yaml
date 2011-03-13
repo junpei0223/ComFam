@@ -1,0 +1,8 @@
+indexes:
+- kind: core_tweet
+  ancestor: no
+  properties:
+  - name: author
+    direction: asc
+  - name: created
+    direction: desc
