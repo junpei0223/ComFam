@@ -1,1 +1,1 @@
-/Users/junpei/kay-1.0.0/manage.py
+../kay-1.1.0/manage.py

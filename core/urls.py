@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # core.urls
-# 
 
 # Following few lines is an example urlmapping with an older interface.
 """
@@ -28,4 +27,3 @@ view_groups = [
 		Rule('/user_home', endpoint='user_home', view='core.views.user_home'),
 	)
 ]
-

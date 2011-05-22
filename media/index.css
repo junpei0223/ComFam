@@ -29,7 +29,7 @@ footer {
     clear:both !important;
     text-align: center;
 }
-new_user{
-	font-size: 12pt;
+#new_user{
+	font-size: 20pt;
 	text-align: center;
 }    

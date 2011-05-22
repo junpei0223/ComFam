@@ -2,27 +2,28 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Home - myapp</title>
-		<link rel="stylesheet" type="text/css" href="{{ media_url }}/home.css" media="all"/>
+		<title>Home - {{ request.user }}</title>
+		<link rel="stylesheet" type="text/css" href="{{ media_url }}/index.css" media="all"/>
 	</head>
 	<body>
 		<header>
-			Hello {{ request.user }}! <a href="{{ create_logout_url() }}">ログアウト</a>
+			{{ request.user }}'s home
+			<a href="{{ create_logout_url(url = '/') }}">ログアウト</a>
 		</header>
 		<nav>
+			{{ form()|safe }}
 		</nav>
 		<section>
-			<article>
-				<h1>このサイトについて</h1>
-				<h2>HTML5とCSS3による豊かな表現</h2>
-			</article>
-			<article>
-			<h1>さらに別の記事</h1>
-			</article>
+			{% for t in tweet_all %}
+			{{ t.created }} : {{ t.tweet }}<br>
+			{% endfor %}
 		</section>
 		<footer>
-			<p>This site is licensed under a <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">Creative Commons Attribution 3.0 License</a></p>
+			<p>This site is licensed under a 
+				<a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">
+					Creative Commons Attribution 3.0 License</a>
+			</p>
 		</footer>
-		</body>
+	</body>
 </html>
 
