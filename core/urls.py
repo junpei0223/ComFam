@@ -25,5 +25,6 @@ view_groups = [
 	ViewGroup(
 		Rule('/', endpoint='index', view='core.views.index'),
 		Rule('/user_home', endpoint='user_home', view='core.views.user_home'),
+		Rule('/new_user', endpoint='new_user', view='core.views.new_user'),
 	)
 ]

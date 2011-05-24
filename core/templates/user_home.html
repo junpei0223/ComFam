@@ -14,8 +14,13 @@
 			{{ form()|safe }}
 		</nav>
 		<section>
+			{#:comment out
 			{% for t in tweet_all %}
-			{{ t.created }} : {{ t.tweet }}<br>
+				{{ t.created }} : {{ t.tweet }}<br>
+				{% endfor %}
+			#}
+			{% for t in my_board.tweets %}
+				{{ t.author }}:{{ t.tweet }}<br>
 			{% endfor %}
 		</section>
 		<footer>
