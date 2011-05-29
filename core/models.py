@@ -18,6 +18,10 @@ class Tweet(db.Model):
 	# basic info.
 	tweet = db.TextProperty(required=True)
 	created = db.DateTimeProperty(auto_now_add=True)
+	@property
+	def created_t(self):
+		d = self.created
+		return d.strftime("%Y/%m/%d %H:%M:%S")
 
 	# key-list method
 	# boards that belong to this entity.
@@ -29,6 +33,8 @@ class Board(db.Model):
 	# BoardObject's name
 	name = db.StringProperty()
 
+	others = db.ListProperty(db.Key)
+
 	@property
 	def tweets(self):
-		return Tweet.gql("WHERE boards = :1", self.key())
+		return Tweet.gql("WHERE boards = :1 ORDER BY created DESC", self.key())

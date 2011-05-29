@@ -20,7 +20,7 @@
 				{% endfor %}
 			#}
 			{% for t in my_board.tweets %}
-				{{ t.author }}:{{ t.tweet }}<br>
+				<{{ t.created_t}}>{{ t.author }}:{{ t.tweet }}<br>
 			{% endfor %}
 		</section>
 		<footer>
