@@ -4,7 +4,7 @@
 from google.appengine.ext import db
 from kay.auth.models import DatastoreUser
 import kay.db
-
+import pytz
 
 class MyUser(DatastoreUser):
 	''' created for AUTH_USER_MODEL'''
@@ -18,10 +18,12 @@ class Tweet(db.Model):
 	# basic info.
 	tweet = db.TextProperty(required=True)
 	created = db.DateTimeProperty(auto_now_add=True)
+
 	@property
 	def created_t(self):
 		d = self.created
-		return d.strftime("%Y/%m/%d %H:%M:%S")
+		_zone = pytz.timezone('Asia/Tokyo')
+		return _zone.fromutc(d).strftime("%m/%d %H:%M")
 
 	# key-list method
 	# boards that belong to this entity.

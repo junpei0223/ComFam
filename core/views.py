@@ -51,18 +51,20 @@ def user_home(request):
 	if request.method == 'POST':
 		if form.validate(request.form):
 			# tweet.author is auto-created.
-			tweet = Tweet(tweet=form['tweet'])
-			if my_board == None:
-				# My tweet must belog to this board object.
-				my_board = Board(name=str(request.user))
-				my_board.put()
-			tweet.boards.append(my_board.key())
-			for o in my_board.others:
-				tweet.boards.append(o)
-			tweet.put()
-			if form['other_name'] != None:
-				rtn = join_board(str(request.user), form['other_name'])
-
+			if form['tweet'] == '':
+					pass
+			else:
+				tweet = Tweet(tweet=form['tweet'])
+				if my_board == None:
+					# My tweet must belog to this board object.
+					my_board = Board(name=str(request.user))
+					my_board.put()
+				tweet.boards.append(my_board.key())
+				for o in my_board.others:
+					tweet.boards.append(o)
+				tweet.put()
+				if form['other_name'] != None:
+					rtn = join_board(str(request.user), form['other_name'])
 	elif request.method == 'GET':
 		pass
 
@@ -121,7 +123,7 @@ def join_board(my_name,other_name):
 
 
 class MyInputForm(forms.Form):
-	tweet = forms.TextField(u'tweet', required=True)
+	tweet = forms.TextField(u'tweet', required=False)
 	other_name = forms.TextField(u'other_name', required=False)
 
 

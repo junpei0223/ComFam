@@ -1,9 +1,7 @@
-#indexes:
-#- kind: core_tweet
-#  ancestor: no
-#  properties:
-#  - name: author
-#    direction: asc
-#  - name: created
-#    direction: desc
+indexes:
 
+- kind: core_tweet
+  properties:
+  - name: boards
+  - name: created
+    direction: desc

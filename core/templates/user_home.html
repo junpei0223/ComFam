@@ -3,7 +3,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Home - {{ request.user }}</title>
-		<link rel="stylesheet" type="text/css" href="{{ media_url }}/index.css" media="all"/>
+		<link type="text/css" rel="stylesheet" href="{{ media_url }}/index.css" media="all"/>
+		<script type="text/javascript" src="{{ media_url }}/table.js"></script>
 	</head>
 	<body>
 		<header>
@@ -14,14 +15,27 @@
 			{{ form()|safe }}
 		</nav>
 		<section>
-			{#:comment out
-			{% for t in tweet_all %}
-				{{ t.created }} : {{ t.tweet }}<br>
+			<table class="sample-tbl html5jp-tbldeco">
+				<colgroup id="time"></colgroup>
+				<colgroup id="user"></colgroup>
+				<colgroup id="tweet"></colgroup>
+				<thead>
+					<tr>
+						<td>time</td>
+						<td>user_name</td>
+						<td>tweet</td>
+					</tr>
+				</thead>
+				<tbody>
+				{% for t in my_board.tweets %}
+					<tr>
+						<td>{{ t.created_t}}</td>
+						<td>{{ t.author }}</td>
+						<td>{{ t.tweet }}</td>
+					</tr>
 				{% endfor %}
-			#}
-			{% for t in my_board.tweets %}
-				<{{ t.created_t}}>{{ t.author }}:{{ t.tweet }}<br>
-			{% endfor %}
+				</tbody>
+			</table>
 		</section>
 		<footer>
 			<p>This site is licensed under a 

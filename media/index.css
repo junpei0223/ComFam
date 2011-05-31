@@ -29,7 +29,39 @@ footer {
     clear:both !important;
     text-align: center;
 }
-#new_user{
+#new_user {
 	font-size: 20pt;
 	text-align: center;
-}    
+}
+/*
+#time {
+	background:#f0f0f0;
+}
+#user {
+	background:#fdfbe7;
+}
+*/
+table.sample-tbl {
+	border-collapse: collapse;
+}
+table.sample-tbl td {
+	padding: 0.5em 1em 0.5em 1em;
+	font-size: small;
+}
+table.sample-tbl thead td {
+	background-color: #0c5576;
+	text-align: center;
+	color: #ffffff;
+}
+table.sample-tbl tfoot td {
+	background-color: #0c5576;
+	text-align: left;
+	font-size: x-small;
+	color: #ffffff;
+}
+table.sample-tbl tbody td {
+	text-align: left;
+	color: #000000;
+	border-bottom: 1px solid #b1c1cc;
+}
+
