@@ -42,7 +42,16 @@ footer {
 }
 */
 table.sample-tbl {
+	width: auto;
 	border-collapse: collapse;
+	table-layout: fixed;
+	white-space: pre;
+	white-space: pre-wrap;
+	white-space: pre-line;
+	white-space: -moz-pre-wrap;
+	word-wrap: break-word;
+	word-break: break-all;
+	overflow: auto;
 }
 table.sample-tbl td {
 	padding: 0.5em 1em 0.5em 1em;

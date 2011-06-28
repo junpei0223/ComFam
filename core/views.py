@@ -10,6 +10,7 @@ from werkzeug import redirect
 from google.appengine.ext import db
 import logging
 from google.appengine.api import users
+from forms import (MyInputForm, MyUserForm)
 
 # Max number of items / page
 ITEMS_PER_PAGE = 20
@@ -18,7 +19,6 @@ ITEMS_PER_PAGE = 20
 def index(request):
 	form = MyUserForm()
 	msg = None
-	
 	if request.method == 'POST':
 		'''
 		if form.validate(request.form):
@@ -33,7 +33,6 @@ def index(request):
 	elif request.method == 'GET':
 		if request.user.is_anonymous() == False:
 			return redirect(url_for('core/user_home'))
-
 	return render_to_response('core/index.html',
 					{'form': form.as_widget(),
 					'msg': msg,
@@ -44,10 +43,8 @@ def index(request):
 def user_home(request):
 	form = MyInputForm()
 	msg = None
-
 	my_board = Board.gql("WHERE name = '%s'"
 					% str(request.user)).get()
-
 	if request.method == 'POST':
 		if form.validate(request.form):
 			# tweet.author is auto-created.
@@ -65,23 +62,17 @@ def user_home(request):
 				tweet.put()
 				if form['other_name'] != None:
 					rtn = join_board(str(request.user), form['other_name'])
+			form.reset()
 	elif request.method == 'GET':
 		pass
-
-	#query = Tweet.gql("WHERE author = :1"
-	#					" ORDER BY created DESC", request.user)
-	#tweet_all = query.fetch(ITEMS_PER_PAGE)
-
 	return render_to_response('core/user_home.html',
 					{'form': form.as_widget(),
 					'msg': msg,
-					#'tweet_all': tweet_all})
 					'my_board': my_board})
 
 
 def new_user(request):
 	form = MyUserForm()
-
 	if request.method == 'POST':
 		if form.validate(request.form):
 			try:
@@ -103,15 +94,12 @@ def join_board(my_name,other_name):
 	'''
 	if my_name == other_name:
 		return False
-
 	my_board = Board.gql("WHERE name = '%s'" % my_name).get()
 	other_board = Board.gql("WHERE name = '%s'" % other_name).get()
-
 	if my_board == None or other_board == None:
 		return False
 	if other_board.key() in my_board.others:
 		return False
-
 	other_tweets = other_board.tweets
 	for t in other_tweets:
 		if not my_board.key() in t.boards:
@@ -120,24 +108,4 @@ def join_board(my_name,other_name):
 	my_board.others.append(other_board.key())
 	my_board.put()
 	return True
-
-
-class MyInputForm(forms.Form):
-	tweet = forms.TextField(u'tweet', required=False)
-	other_name = forms.TextField(u'other_name', required=False)
-
-
-class MyUserForm(forms.Form):
-	user_name = forms.TextField(u'ユーザー名', required=True)
-	password = forms.TextField(u'パスワード',
-		required=True, widget=forms.PasswordInput)
-	password_confirm = forms.TextField(u'パスワードの再入力',
-		required=True, widget=forms.PasswordInput)
-
-	def context_validate(self, data):
-		'''Confirm the password one another'''
-		if data['password'] != data['password_confirm']:
-			raise ValidationError(u'パスワードが一致しません。')
-
-		return None
 
