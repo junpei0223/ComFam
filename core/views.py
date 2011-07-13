@@ -9,7 +9,7 @@ from kay.auth.decorators import login_required
 from werkzeug import redirect
 from google.appengine.ext import db
 import logging
-from google.appengine.api import users
+from google.appengine.api import (users, memcache)
 from forms import (MyInputForm, MyUserForm)
 
 # Max number of items / page
@@ -43,8 +43,13 @@ def index(request):
 def user_home(request):
 	form = MyInputForm()
 	msg = None
-	my_board = Board.gql("WHERE name = '%s'"
-					% str(request.user)).get()
+	my_board = memcache.get("%s_board" % str(request.user))
+	if my_board == None:
+		my_board = Board.gql("WHERE name = '%s'"
+						% str(request.user)).get()
+		if not memcache.add("%s_board" % str(request.user), my_board, 60):
+				logging.error("Memcache set failed(my_board).")
+	logging.debug("my_board:%s"%my_board)
 	if request.method == 'POST':
 		if form.validate(request.form):
 			# tweet.author is auto-created.
@@ -65,10 +70,23 @@ def user_home(request):
 			form.reset()
 	elif request.method == 'GET':
 		pass
+	if my_board == None:
+		tweets = []
+	else:
+		tweets = my_board.tweets
+	#tweets = memcache.get("%s_tweets" % str(request.user))
+	#if tweets == None:
+	#	logging.debug("my_board:%s" % my_board)
+	#	if my_board == None:
+	#		tweets = []
+	#	else:
+	#		tweets = my_board.tweets
+	#	if not memcache.add("%s_tweets" % str(request.user), tweets, 60):
+	#			logging.error("Memcache set failed(tweets).")
 	return render_to_response('core/user_home.html',
 					{'form': form.as_widget(),
 					'msg': msg,
-					'my_board': my_board})
+					'tweets': tweets})
 
 
 def new_user(request):
