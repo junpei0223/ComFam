@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>ComFam - user registration</title>
+		<link rel="stylesheet" type="text/css" href="{{ media_url }}/index.css" media="all"/>
+	</head>
+	<body>
+		{% if request.user.is_anonymous() %}
+			{{ form()|safe }}
+		{% endif %}
+		<h4><a href="/">Home</a></h4>
+	</body>
+</html>
+	
