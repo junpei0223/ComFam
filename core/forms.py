@@ -5,6 +5,7 @@ from kay.utils import forms
 
 class MyInputForm(forms.Form):
 	tweet = forms.TextField(u'tweet', required=False)
+	# tweet = forms.Textarea(u'tweet', required=False))
 	other_name = forms.TextField(u'other_name', required=False)
 
 

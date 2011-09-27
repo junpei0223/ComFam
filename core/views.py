@@ -4,17 +4,15 @@
 from kay.utils import (render_to_response, forms, url_for)
 from kay.utils.validators import ValidationError
 from kay.auth import (create_new_user, DuplicateKeyError)
-from models import (MyUser, Tweet, Board)
 from kay.auth.decorators import login_required
-from werkzeug import redirect
+from kay import dbutils
+from werkzeug import (redirect, Response)
 from google.appengine.ext import db
-import logging
 from google.appengine.api import (users, memcache)
+from models import (MyUser, Tweet, Board)
 from forms import (MyInputForm, MyUserForm)
-
-# Max number of items / page
-ITEMS_PER_PAGE = 20
-
+import simplejson
+import logging
 
 def index(request):
 	form = MyUserForm()
@@ -33,6 +31,7 @@ def index(request):
 	elif request.method == 'GET':
 		if request.user.is_anonymous() == False:
 			return redirect(url_for('core/user_home'))
+	
 	return render_to_response('core/index.html',
 					{'form': form.as_widget(),
 					'msg': msg,
@@ -43,13 +42,19 @@ def index(request):
 def user_home(request):
 	form = MyInputForm()
 	msg = None
+
+	logging.debug("user_home start")
+
 	my_board = memcache.get("%s_board" % str(request.user))
+	
 	if my_board == None:
 		my_board = Board.gql("WHERE name = '%s'"
 						% str(request.user)).get()
 		if not memcache.add("%s_board" % str(request.user), my_board, 60):
 				logging.error("Memcache set failed(my_board).")
-	logging.debug("my_board:%s"%my_board)
+	
+	#logging.debug("my_board:%s"%my_board)
+	
 	if request.method == 'POST':
 		if form.validate(request.form):
 			# tweet.author is auto-created.
@@ -70,6 +75,7 @@ def user_home(request):
 			form.reset()
 	elif request.method == 'GET':
 		pass
+	
 	if my_board == None:
 		tweets = []
 	else:
@@ -83,6 +89,7 @@ def user_home(request):
 	#		tweets = my_board.tweets
 	#	if not memcache.add("%s_tweets" % str(request.user), tweets, 60):
 	#			logging.error("Memcache set failed(tweets).")
+	logging.debug("user_home end")
 	return render_to_response('core/user_home.html',
 					{'form': form.as_widget(),
 					'msg': msg,
@@ -112,18 +119,32 @@ def join_board(my_name,other_name):
 	'''
 	if my_name == other_name:
 		return False
+
 	my_board = Board.gql("WHERE name = '%s'" % my_name).get()
 	other_board = Board.gql("WHERE name = '%s'" % other_name).get()
+
 	if my_board == None or other_board == None:
 		return False
+
 	if other_board.key() in my_board.others:
 		return False
+
 	other_tweets = other_board.tweets
+
 	for t in other_tweets:
 		if not my_board.key() in t.boards:
 			t.boards.append(my_board.key())
 			t.put()
+
 	my_board.others.append(other_board.key())
 	my_board.put()
+
 	return True
+
+
+def json_test(request):
+	ts = Tweet.all()
+	json = simplejson.dumps([dbutils.to_dict(t) for t in ts])
+	return Response(json,content_type="application/json")
+
 

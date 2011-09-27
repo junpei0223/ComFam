@@ -11,11 +11,15 @@
 			{{ request.user }}'s home
 			<a href="{{ create_logout_url(url = '/') }}">ログアウト</a>
 		</header>
-		<nav>
+		<!--nav>
 			{{ form()|safe }}
-		</nav>
-		<section>
-			<table class="sample-tbl html5jp-tbldeco">
+		</nav-->
+		<!section>
+		<form action="" method="post">
+			<textarea name="freeans" rows="4" cols="40"> 自由に意見を記述してください </textarea>
+			<input type="submit" value="Submit" />
+		</form>
+			<!---table class="sample-tbl html5jp-tbldeco">
 				<colgroup id="time"></colgroup>
 				<colgroup id="user"></colgroup>
 				<colgroup id="tweet"></colgroup>
@@ -35,8 +39,12 @@
 					</tr>
 				{% endfor %}
 				</tbody>
-			</table>
-		</section>
+			</table--->
+			{% for t in tweets %}
+				<b><span style="color: blue;">{{ t.author }}</span>さんは{{ t.created_t }}に書きました:</b>
+				<blockquote>{{ t.tweet }}</blockquote>
+			{% endfor %}
+		<!/section>
 		<footer>
 			<p>This site is licensed under a 
 				<a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">

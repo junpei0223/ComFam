@@ -31,10 +31,12 @@ DEFAULT_LANG = 'en'
 INSTALLED_APPS = (
 	'kay.auth',
 	'core',
+	#'json_test',
 )
 
 APP_MOUNT_POINTS = {
 	'core':'/',
+	#'json_test':'/json_test',
 }
 
 # You can remove following settings if unnecessary.
