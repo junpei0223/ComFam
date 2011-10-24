@@ -9,24 +9,15 @@ from kay import dbutils
 from werkzeug import (redirect, Response)
 from google.appengine.ext import db
 from google.appengine.api import (users, memcache)
-from models import (MyUser, Tweet, Board)
-from forms import (MyInputForm, MyUserForm)
+from core.models import (MyUser, Tweet, Board)
+from core.forms import (MyInputForm, MyUserForm)
 import simplejson
 import logging
 
 def index(request):
 	form = MyUserForm()
-	msg = None
+	
 	if request.method == 'POST':
-		'''
-		if form.validate(request.form):
-			try:
-				create_new_user(form['user_name'],
-								password=form['password'])
-				msg = u'ユーザーを登録しました。'
-			except DuplicateKeyError:
-				msg = u'既に同じユーザー名が登録されています。'
-		'''
 		pass
 	elif request.method == 'GET':
 		if request.user.is_anonymous() == False:
@@ -34,27 +25,13 @@ def index(request):
 	
 	return render_to_response('core/index.html',
 					{'form': form.as_widget(),
-					'msg': msg,
 					'users': MyUser.all()})
 
 
 @login_required
 def user_home(request):
-	form = MyInputForm()
-	msg = None
+	form = MyInputForm()	
 
-	logging.debug("user_home start")
-
-	my_board = memcache.get("%s_board" % str(request.user))
-	
-	if my_board == None:
-		my_board = Board.gql("WHERE name = '%s'"
-						% str(request.user)).get()
-		if not memcache.add("%s_board" % str(request.user), my_board, 60):
-				logging.error("Memcache set failed(my_board).")
-	
-	#logging.debug("my_board:%s"%my_board)
-	
 	if request.method == 'POST':
 		if form.validate(request.form):
 			# tweet.author is auto-created.
@@ -62,24 +39,21 @@ def user_home(request):
 					pass
 			else:
 				tweet = Tweet(tweet=form['tweet'])
-				if my_board == None:
-					# My tweet must belog to this board object.
-					my_board = Board(name=str(request.user))
-					my_board.put()
-				tweet.boards.append(my_board.key())
-				for o in my_board.others:
-					tweet.boards.append(o)
 				tweet.put()
-				if form['other_name'] != None:
-					rtn = join_board(str(request.user), form['other_name'])
-			form.reset()
+		form.reset()
 	elif request.method == 'GET':
 		pass
 	
-	if my_board == None:
-		tweets = []
-	else:
-		tweets = my_board.tweets
+	author_list = []
+	author_list.append(request.user.key())
+
+	user_info = MyUser.gql("WHERE user_name = :1",
+							str(request.user)).get()
+	if user_info:
+		for f in user_info.friends:
+			author_list.append(f)
+
+	tweets = Tweet.gql("WHERE author IN :1", author_list)
 	#tweets = memcache.get("%s_tweets" % str(request.user))
 	#if tweets == None:
 	#	logging.debug("my_board:%s" % my_board)
@@ -89,33 +63,33 @@ def user_home(request):
 	#		tweets = my_board.tweets
 	#	if not memcache.add("%s_tweets" % str(request.user), tweets, 60):
 	#			logging.error("Memcache set failed(tweets).")
-	logging.debug("user_home end")
 	return render_to_response('core/user_home.html',
 					{'form': form.as_widget(),
-					'msg': msg,
 					'tweets': tweets})
 
 
 def new_user(request):
 	form = MyUserForm()
+
 	if request.method == 'POST':
 		if form.validate(request.form):
 			try:
 				create_new_user(form['user_name'],
 								password=form['password'])
-				msg = u'ユーザーを登録しました。'
-				return redirect(url_for('core/user_home'))
+				# msg = u'ユーザーを登録しました。'
+				return redirect(url_for('core/index'))
 			except DuplicateKeyError:
-				msg = u'既に同じユーザー名が登録されています。'
-	
+				# msg = u'既に同じユーザー名が登録されています。'
+				pass
+		
 	return render_to_response('core/new_user.html',
 					{'form': form.as_widget()})
 
 
 def join_board(my_name,other_name):
 	'''
-	Return of True means that other_tweets are added to my board.
-	Oppsitely, return of False means Failure of addision to my board happened.
+	True Return means that other_tweets are added to my board.
+	Oppsitely, False Return means that Failure of addision to my board happened.
 	'''
 	if my_name == other_name:
 		return False

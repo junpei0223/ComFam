@@ -7,16 +7,6 @@
 	</head>
 	<body>
 		<header>
-			<!--
-			{% from "auth/macros.html" import render_loginbox with context %}
-			<div>
-			{% if request.user.is_anonymous() %}
-				{{ render_loginbox() }}
-			{% else %}
-				Hello {{ request.user }}! <a href="{{ create_logout_url() }}">ログアウト</a>
-			{% endif %}
-			</div>
-			-->
 			<h1>ComFam</h1>
 		</header>
 		<nav>
@@ -27,12 +17,6 @@
 				{% endif %}
 			</div>
 			<a href="/new_user">新規ユーザー登録</a>
-			<!--
-			{% if request.user.is_anonymous() %}
-				<a href=#new_user id="new_user">新規ユーザー登録</a>
-				{{ form()|safe }}
-			{% endif %}
-			-->
 		</nav>
 		<section>
 			<article>
@@ -41,7 +25,8 @@
 			</article>
 		</section>
 		<footer>
-			<p>This site is licensed under a <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">Creative Commons Attribution 3.0 License</a></p>
+			<p>This site is licensed under a <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">
+				Creative Commons Attribution 3.0 License</a></p>
 		</footer>
 		</body>
 </html>

@@ -3,54 +3,24 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Home - {{ request.user }}</title>
-		<link type="text/css" rel="stylesheet" href="{{ media_url }}/index.css" media="all"/>
-		<script type="text/javascript" src="{{ media_url }}/table.js"></script>
+		<link rel="stylesheet" type="text/css" href="{{ media_url }}/user_home.css" media="all"/>
 	</head>
 	<body>
 		<header>
 			{{ request.user }}'s home
 			<a href="{{ create_logout_url(url = '/') }}">ログアウト</a>
 		</header>
-		<!--nav>
-			{{ form()|safe }}
-		</nav-->
-		<!section>
-		<form action="" method="post">
-			<textarea name="freeans" rows="4" cols="40"> 自由に意見を記述してください </textarea>
-			<input type="submit" value="Submit" />
-		</form>
-			<!---table class="sample-tbl html5jp-tbldeco">
-				<colgroup id="time"></colgroup>
-				<colgroup id="user"></colgroup>
-				<colgroup id="tweet"></colgroup>
-				<thead>
-					<tr>
-						<td width="50">time</td>
-						<td width="80">user_name</td>
-						<td>tweet</td>
-					</tr>
-				</thead>
-				<tbody>
-				{% for t in tweets %}
-					<tr>
-						<td>{{ t.created_t}}</td>
-						<td>{{ t.author }}</td>
-						<td>{{ t.tweet }}</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table--->
-			{% for t in tweets %}
-				<b><span style="color: blue;">{{ t.author }}</span>さんは{{ t.created_t }}に書きました:</b>
-				<blockquote>{{ t.tweet }}</blockquote>
-			{% endfor %}
-		<!/section>
-		<footer>
-			<p>This site is licensed under a 
-				<a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">
-					Creative Commons Attribution 3.0 License</a>
-			</p>
-		</footer>
+		{{ form()|safe }}
+		{% for t in tweets %}
+			<article>
+				<header>
+					<b><span style="color: blue;">{{ t.author }}</span>({{ t.created_t }})</b>
+				</header>
+				<p>
+					{{ t.tweet }}
+				</p>
+			</article>
+		{% endfor %}
 	</body>
 </html>
 

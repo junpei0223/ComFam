@@ -2,12 +2,13 @@
 # core.forms
 
 from kay.utils import forms
+from models import Tweet
+from kay.utils.forms.modelform import ModelForm
 
-class MyInputForm(forms.Form):
-	tweet = forms.TextField(u'tweet', required=False)
-	# tweet = forms.Textarea(u'tweet', required=False))
-	other_name = forms.TextField(u'other_name', required=False)
-
+class MyInputForm(ModelForm):
+	class Meta:
+		model = Tweet
+		fields = ('tweet')
 
 class MyUserForm(forms.Form):
 	user_name = forms.TextField(u'ユーザー名', required=True)
