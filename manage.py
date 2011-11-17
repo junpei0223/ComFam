@@ -1,1 +1,1 @@
-../kay-1.1.0/manage.py
+../kay-1.1.1/manage.py

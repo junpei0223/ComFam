@@ -1,26 +1,126 @@
 <!doctype html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Home - {{ request.user }}</title>
-		<link rel="stylesheet" type="text/css" href="{{ media_url }}/user_home.css" media="all"/>
-	</head>
-	<body>
-		<header>
-			{{ request.user }}'s home
-			<a href="{{ create_logout_url(url = '/') }}">ログアウト</a>
-		</header>
-		{{ form()|safe }}
-		{% for t in tweets %}
-			<article>
+		<head>
+				<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+				<title>Home - {{ request.user }}</title>
+				<link rel="stylesheet" type="text/css" href="{{ media_url }}/user_home.css" media="all"/>
+				<style type="text/css">
+						<!--
+						body { text-align:center; }
+						header, nav, article, aside, section, footer {
+								display:block;
+						}
+						#container { 
+								width:780px;
+								text-align:left;
+								margin:0 auto;
+								background-color:gray;
+							    border-radius: 10px; /* CSS3草案 */  
+								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+								-moz-border-radius: 10px; /* Firefox用 */
+								display: -webkit-box;
+								display: -moz-box;
+						}
+						#inner { 
+								width:600px; 
+								margin:10px 10px; 
+								background-color:yellow;
+							    border-radius: 10px; /* CSS3草案 */  
+								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+								-moz-border-radius: 10px; /* Firefox用 */  
+						}
+						#top_wrap{ 
+								margin:10px 10px; 
+								padding:5px 5px; 
+								background-color:green;
+							    border-radius: 10px; /* CSS3草案 */  
+								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+								-moz-border-radius: 10px; /* Firefox用 */  
+						}
+						#main_wrap{ 
+								/* float:left; */
+								margin:10px 10px; 
+								padding:5px 5px; 
+								background-color:pink; 
+							    border-radius: 10px; /* CSS3草案 */  
+								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+								-moz-border-radius: 10px; /* Firefox用 */  
+						}
+						aside {
+								width:200px; 
+								margin:10px 10px; 
+								padding:5px 5px; 
+								background-color:pink; 
+							    border-radius: 10px; /* CSS3草案 */  
+								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+								-moz-border-radius: 10px; /* Firefox用 */  
+						}
+						footer { clear:both; }
+						-->
+				</style>
+				<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+				<script type="text/javascript">
+						<!--
+						$.fn.urlAutoLink = function(baseURL){  
+								return this.each(function(){  
+												var srcText = this.innerHTML;  
+												this.innerHTML = srcText.replace(/(http:\/\/[\x21-\x7e]+)/gi, "<a href='$1'>$1</a>");  
+												});  
+						}
+						// -->
+				</script>
+				<script type="text/javascript">
+						<!--
+						$(function () {
+							$("#main_wrap").urlAutoLink();
+						});
+						// -->
+				</script>
+		</head>
+		<body>
 				<header>
-					<b><span style="color: blue;">{{ t.author }}</span>({{ t.created_t }})</b>
+						{{ request.user }}'s home
+						<a href="{{ create_logout_url(url = '/') }}">ログアウト</a>
 				</header>
-				<p>
-					{{ t.tweet }}
-				</p>
-			</article>
-		{% endfor %}
+
+				<div id="container">
+						<div id="inner">
+								<div id="top_wrap">
+										<!--{{ form()|safe }}-->
+										{% call form() %}
+											{{ form['tweet'].errors()|safe }}
+											{{ form['tweet'].label()|safe }}<br>
+											<!--{{ form['tweet'].render()|safe }}-->
+											<textarea rows="3" cols="65" id="f_tweet" name="tweet"></textarea>
+											{{ form.default_actions()|safe }}
+										{% endcall %}
+								</div>
+								<div id="main_wrap">
+										{% for t in tweets %}
+										<article>
+												<header>
+														<b><span style="color: blue;">{{ t.author }}</span>({{ t.created_t }})</b>
+												</header>
+												<p> {{ t.tweet }} </p>
+										</article>
+										{% endfor %}
+								</div>
+						</div>
+						<aside>
+								<section>
+										<h1>カテゴリー</h1>
+										<ul>
+												<li><a href="index.html">Home</a></li>
+												<li><a href="/about/">About</a></li>
+												<li><a href="/blog/">Blog</a></li>
+										</ul>
+								</section>	
+						</aside>
+				</div>
+				<footer>
+						footer
+				</footer>
+		</div>
 	</body>
 </html>
 

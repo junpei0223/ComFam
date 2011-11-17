@@ -39,30 +39,25 @@ def user_home(request):
 					pass
 			else:
 				tweet = Tweet(tweet=form['tweet'])
+				logging.debug('tweet>>%s' % tweet.tweet )
 				tweet.put()
 		form.reset()
 	elif request.method == 'GET':
 		pass
-	
+
+	# make author_list
 	author_list = []
 	author_list.append(request.user.key())
-
 	user_info = MyUser.gql("WHERE user_name = :1",
 							str(request.user)).get()
 	if user_info:
 		for f in user_info.friends:
 			author_list.append(f)
 
+	# get tweets
 	tweets = Tweet.gql("WHERE author IN :1", author_list)
-	#tweets = memcache.get("%s_tweets" % str(request.user))
-	#if tweets == None:
-	#	logging.debug("my_board:%s" % my_board)
-	#	if my_board == None:
-	#		tweets = []
-	#	else:
-	#		tweets = my_board.tweets
-	#	if not memcache.add("%s_tweets" % str(request.user), tweets, 60):
-	#			logging.error("Memcache set failed(tweets).")
+	
+	# rendar html
 	return render_to_response('core/user_home.html',
 					{'form': form.as_widget(),
 					'tweets': tweets})
