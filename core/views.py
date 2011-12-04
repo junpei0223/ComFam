@@ -8,7 +8,7 @@ from kay.auth.decorators import login_required
 from kay import dbutils
 from werkzeug import (redirect, Response)
 from google.appengine.ext import db
-from google.appengine.api import (users, memcache)
+from google.appengine.api import (users, memcache, channel)
 from core.models import (MyUser, Tweet, Board)
 from core.forms import (MyInputForm, MyUserForm)
 import simplejson
@@ -27,23 +27,18 @@ def index(request):
 					{'form': form.as_widget(),
 					'users': MyUser.all()})
 
+def get_tweet(t):
+	tweet_info = {
+		'tweet': t.tweet,
+		'author': t.author,
+		'created_t': t.created_t
+	}
+	return simplejson.dumps(tweet_info)
 
 @login_required
 def user_home(request):
-	form = MyInputForm()	
-
-	if request.method == 'POST':
-		if form.validate(request.form):
-			# tweet.author is auto-created.
-			if form['tweet'] == '':
-					pass
-			else:
-				tweet = Tweet(tweet=form['tweet'])
-				logging.debug('tweet>>%s' % tweet.tweet )
-				tweet.put()
-		form.reset()
-	elif request.method == 'GET':
-		pass
+	# create token
+	token = channel.create_channel(str(request.user.key()))
 
 	# make author_list
 	author_list = []
@@ -54,13 +49,32 @@ def user_home(request):
 		for f in user_info.friends:
 			author_list.append(f)
 
+	form = MyInputForm()	
+	if request.method == 'POST':
+		if form.validate(request.form):
+			# tweet.author is auto-created.
+			if form['tweet'] == '':
+					pass
+			else:
+				tweet = Tweet(tweet=form['tweet'])
+				logging.debug('tweet>>%s' % tweet.tweet )
+				tweet.put()
+				# send message to others
+				message = get_tweet(tweet)
+				if l in author_list:
+					channel.send_message(l,message)
+		form.reset()
+	elif request.method == 'GET':
+		pass
+
 	# get tweets
 	tweets = Tweet.gql("WHERE author IN :1", author_list)
 	
 	# rendar html
 	return render_to_response('core/user_home.html',
 					{'form': form.as_widget(),
-					'tweets': tweets})
+					'tweets': tweets,
+					'token': token})
 
 
 def new_user(request):
