@@ -8,62 +8,6 @@
 				<script>google.load("jquery", "1.7.0");</script>
 				<script src="{{ media_url }}/imgpreview.min.js"></script>
 				<link rel="stylesheet" type="text/css" href="{{ media_url }}/user_home.css" media="all"/>
-				<style type="text/css">
-						<!--
-						body { text-align:center; }
-						header, nav, article, aside, section, footer {
-								display:block;
-						}
-						#container { 
-								width:800px;
-								text-align:left;
-								margin:0 auto;
-								background-color:gray;
-								border-radius: 10px; /* CSS3草案 */  
-								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
-								-moz-border-radius: 10px; /* Firefox用 */
-								display: -webkit-box;
-								display: -moz-box;
-						}
-						#inner { 
-								width:95%;
-								margin:10px;
-								padding:10px;
-								background-color:yellow;
-								border-radius: 10px; /* CSS3草案 */  
-								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
-								-moz-border-radius: 10px; /* Firefox用 */  
-						}
-						#top_wrap{ 
-								margin:10px; 
-								padding:5px 5px; 
-								background-color:green;
-								border-radius: 10px; /* CSS3草案 */  
-								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
-								-moz-border-radius: 10px; /* Firefox用 */  
-						}
-						#main_wrap{ 
-								margin:10px; 
-								padding:5px 5px; 
-								background-color:pink; 
-								border-radius: 10px; /* CSS3草案 */  
-								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
-								-moz-border-radius: 10px; /* Firefox用 */  
-						}
-						aside {
-								width:200px; 
-								margin:10px 10px; 
-								padding:5px 5px; 
-								background-color:pink; 
-								border-radius: 10px; /* CSS3草案 */  
-								-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
-								-moz-border-radius: 10px; /* Firefox用 */  
-						}
-						footer { 
-								clear:both;
-						}
-						-->
-				</style>
 		</head>
 		<body>
 				<script>
@@ -75,39 +19,55 @@
 						}
 				</script>
 				<script>
-						//jQuery.noConflict();
-						//jQuery(doccument).ready(function(){});
 						$(function () {
 								$("#main_wrap").urlAutoLink();
-								$("#main_wrap a").imgPreview({
+							/*	$("#main_wrap a").imgPreview({
 										imgCSS: { width: 200 }
-								});
+								});*/
 						});
 				</script>
 				<script>
-						onOpened = function(){
-								var xhr = new XMLHttpRequest();
-								xhr.open("GET", "http://localhost:8080/user_home", true);
-								xhr.send();
+					var sendMessage = function(data) {
+						$.ajax({
+							url : '/user_home',
+							type: 'POST',
+							data: data
+						})
+					};
+					$(document).ready(function(){
+						$("#sumbit").click(function() {
+							//$('#text').attr('value').show();
+							console.log("submit");
+							//alert("submit");
+							//sendMessage($('#text').attr('value'));
+							return false;
+						});
+					});
+					/*
+					$('#form_message').ajaxForm(function() { 
+						alert("Thank you for your comment!"); 
+					});*/
+					channel = new goog.appengine.Channel("{{ token }}");
+					socket = channel.open();
+					socket.onopen = function() {
+						//alert("open");
+					};
+					socket.onmessage = function(m) {
+						//alert("message");
+						info = JSON.parse(m.data);
+						console.log(info.tweet);
+						console.log(info.author_user_name);
+						//$('#main_wrap').prepend("<article><header><b><span styple=¥"color: blue;¥">"+info.author+"</sapn>"+info.created_t+"</b></header><p>"+info.tweet+"</p></article>");
+						$('#main_wrap').prepend("<article><header><b><span>"+info.author_user_name+"</span>("+info.created_t+")</b></header><p>"+info.tweet+"</p></article><hr>");
+					};
+					socket.onerror = function() {
+						//alert("error");
+						console.log("error");
+					};
+					socket.onclose = function() {
+						//alert("close");
+						console.log("close");
 						};
-
-						channel = new goog.appengine.Channel("{{ token }}");
-						socket = channel.open();
-						socket.onopen = function() {
-							alert("open");
-						};
-						socket.onmessage = function(m) {
-							console.log("message");
-							info = JSON.parse(m.data);
-							$("#top_wrap").prepend("<article><header><b><span styple="color: blue;">"+info.author+"</sapn>"+info.created_t+"</b></header><p>"+info.tweet+"</p></article>");
-						};
-						socket.onerror = function() {
-							console.log("error");
-						};
-						socket.onclose = function() {
-							console.log("close");
-						};
-
 				</script>
 				<header>
 				{{ request.user }}'s home
@@ -117,12 +77,10 @@
 				<div id="container">
 						<div id="inner">
 								<div id="top_wrap">
-										<!--{{ form()|safe }}-->
 										{% call form() %}
 										{{ form['tweet'].errors()|safe }}
-										{{ form['tweet'].label()|safe }}<br>
-										<!--{{ form['tweet'].render()|safe }}-->
-										<textarea rows="3" cols="65" id="f_tweet" name="tweet"></textarea>
+										<!--{{ form['tweet'].label()|safe }}><br-->
+										<textarea rows="3" cols="65" id="f_tweet" name="tweet" placeholder="ツイートしてください..."></textarea>
 										{{ form.default_actions()|safe }}
 										{% endcall %}
 								</div>
@@ -134,22 +92,13 @@
 										</header>
 										<p> {{ t.tweet }} </p>
 										</article>
+										<hr>
 										{% endfor %}
 								</div>
 						</div>
-						<!--aside>
-						<section>
-						<h1>カテゴリー</h1>
-						<ul>
-								<li><a href="index.html">Home</a></li>
-								<li><a href="/about/">About</a></li>
-								<li><a href="/blog/">Blog</a></li>
-						</ul>
-						</section>	
-						</aside-->
 				</div>
 				<footer>
-				footer
+				α版 - 個人情報は控えてください。
 				</footer>
 		</div>
 

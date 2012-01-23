@@ -20,6 +20,7 @@ class MyUserForm(forms.Form):
 		'''Confirm the password one another'''
 		if data['password'] != data['password_confirm']:
 			raise ValidationError(u'パスワードが一致しません。')
-
 		return None
 
+class FriendsForm(forms.Form):
+	friend = forms.TextField(u'friend', required=True)

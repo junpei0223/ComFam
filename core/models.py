@@ -23,6 +23,7 @@ class Board(db.Model):
 class MyUser(DatastoreUser):
 	''' created for AUTH_USER_MODEL'''
 	friends = db.ListProperty(db.Key)
+	# text = db.TextProperty(required=False)
 
 
 class Tweet(db.Model):

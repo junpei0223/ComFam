@@ -79,5 +79,6 @@ view_groups = [
 		Rule('/user_home', endpoint='user_home', view='core.views.user_home'),
 		Rule('/new_user', endpoint='new_user', view='core.views.new_user'),
 		Rule('/json_test', endpoint='json_test', view='core.views.json_test'),
+		Rule('/set_friends', endpoint='set_friends', view='core.views.set_friends'),
 	)
 ]

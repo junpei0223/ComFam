@@ -10,9 +10,10 @@ from werkzeug import (redirect, Response)
 from google.appengine.ext import db
 from google.appengine.api import (users, memcache, channel)
 from core.models import (MyUser, Tweet, Board)
-from core.forms import (MyInputForm, MyUserForm)
-import simplejson
+from core.forms import (MyInputForm, MyUserForm, FriendsForm)
+#import simplejson
 import logging
+import json
 
 def index(request):
 	form = MyUserForm()
@@ -27,13 +28,15 @@ def index(request):
 					{'form': form.as_widget(),
 					'users': MyUser.all()})
 
+
 def get_tweet(t):
 	tweet_info = {
 		'tweet': t.tweet,
-		'author': t.author,
+		'author_user_name': t.author.user_name,
 		'created_t': t.created_t
 	}
-	return simplejson.dumps(tweet_info)
+	return json.encode(tweet_info)
+
 
 @login_required
 def user_home(request):
@@ -46,6 +49,7 @@ def user_home(request):
 	user_info = MyUser.gql("WHERE user_name = :1",
 							str(request.user)).get()
 	if user_info:
+		# logging.debug('author_list>>%s' % str(user_info.friends) )
 		for f in user_info.friends:
 			author_list.append(f)
 
@@ -57,24 +61,51 @@ def user_home(request):
 					pass
 			else:
 				tweet = Tweet(tweet=form['tweet'])
-				logging.debug('tweet>>%s' % tweet.tweet )
+				#logging.debug('tweet>>%s' % tweet.tweet )
 				tweet.put()
 				# send message to others
 				message = get_tweet(tweet)
-				if l in author_list:
-					channel.send_message(l,message)
+				#logging.debug('message>>%s' % str(message))
+				for l in author_list:
+					if l != request.user.key():
+						#logging.debug('send_messaget>>%s' % str(l) )
+						channel.send_message(str(l),message)
+		else:
+			#logging.debug('--send_messaget>>%s' % request.data )
+			pass
+
 		form.reset()
 	elif request.method == 'GET':
 		pass
 
 	# get tweets
-	tweets = Tweet.gql("WHERE author IN :1", author_list)
+	tweets = Tweet.gql("WHERE author IN :1 ORDER BY created DESC LIMIT 15", author_list)
 	
 	# rendar html
 	return render_to_response('core/user_home.html',
 					{'form': form.as_widget(),
 					'tweets': tweets,
 					'token': token})
+
+
+@login_required
+def set_friends(request):
+	form = FriendsForm()
+
+	if request.method == 'POST':
+		if form.validate(request.form):
+			# set friends key
+			user_info = MyUser.gql("WHERE user_name = :1",
+									str(request.user)).get()
+			f = MyUser.gql("WHERE user_name = :1",
+									form['friend']).get()
+			# logging.debug('set_friends>>%s' % f.key() )
+			if f.key() not in user_info.friends:
+				user_info.friends.append(f.key())
+				user_info.put()
+
+	return render_to_response('core/set_friends.html',
+					{'form': form.as_widget()})
 
 
 def new_user(request):
