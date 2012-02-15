@@ -1,0 +1,73 @@
+body { text-align:center; }
+
+header, nav, article, aside, section, footer {
+		display:block;
+}
+
+#container { 
+		width: 800px;
+		text-align: left;
+		margin: 0 auto;
+		/*background-color:gray;*/
+		border-radius: 10px; /* CSS3草案 */  
+		-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+		-moz-border-radius: 10px; /* Firefox用 */
+		display: -webkit-box;
+		display: -moz-box;
+}
+
+#inner { 
+		width: 95%;
+		margin: 10px;
+		padding: 10px;
+		/*background-color:yellow;*/
+		border-radius: 10px; /* CSS3草案 */  
+		-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+		-moz-border-radius: 10px; /* Firefox用 */  
+}
+
+#top_wrap{ 
+		margin: 10px; 
+		padding: 5px 5px; 
+		/*background-color:green;*/
+		background-color: lightgray;
+		border-radius: 10px; /* CSS3草案 */  
+		-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+		-moz-border-radius: 10px; /* Firefox用 */  
+}
+
+#main_wrap{ 
+		margin: 10px; 
+		padding: 5px 5px; 
+		background-color: mistyrose; 
+		border-radius: 10px; /* CSS3草案 */  
+		-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+		-moz-border-radius: 10px; /* Firefox用 */  
+}
+
+aside {
+		width: 200px; 
+		margin: 10px 10px; 
+		padding: 5px 5px; 
+		/*background-color:pink;*/
+		border-radius: 10px; /* CSS3草案 */  
+		-webkit-border-radius: 10px; /* Safari,Google Chrome用 */  
+		-moz-border-radius: 10px; /* Firefox用 */  
+}
+
+footer { 
+		clear: both;
+}
+
+p {
+		width: 700px;
+		word-break: normal;
+		margin: 3px; 
+		padding: 3px 3px; 
+		overflow: auto;
+}
+
+textarea {
+		font-size: large;
+}
+

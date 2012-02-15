@@ -1,0 +1,50 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, TemplateNotFound
+name = '/user_home.html'
+
+def root(context, environment=environment):
+    l_form = context.resolve('form')
+    l_request = context.resolve('request')
+    l_create_logout_url = context.resolve('create_logout_url')
+    l_token = context.resolve('token')
+    l_tweets = context.resolve('tweets')
+    l_media_url = context.resolve('media_url')
+    t_1 = environment.filters['safe']
+    if 0: yield None
+    yield u'<!doctype html>\n<html>\n\t\t<head>\n\t\t\t\t<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\n\t\t\t\t<title>Home - %s</title>\n\t\t\t\t<script src="/_ah/channel/jsapi"></script>\n\t\t\t\t<script src="http://www.google.com/jsapi"></script>\n\t\t\t\t<script>google.load("jquery", "1.7.0");</script>\n\t\t\t\t<script src="%s/imgpreview.min.js"></script>\n\t\t\t\t<link rel="stylesheet" type="text/css" href="%s/user_home.css" media="all"/>\n\t\t</head>\n\t\t<body>\n\t\t\t\t<script>\n\t\t\t\t\t\t$.fn.urlAutoLink = function(baseURL){  \n\t\t\t\t\t\t\t\treturn this.each(function(){  \n\t\t\t\t\t\t\t\t\t\tvar srcText = this.innerHTML;  \n\t\t\t\t\t\t\t\t\t\tthis.innerHTML = srcText.replace(/(http:\\/\\/[\\x21-\\x7e]+)/gi, "<a href=\'$1\'>$1</a>");  \n\t\t\t\t\t\t\t\t});  \n\t\t\t\t\t\t}\n\t\t\t\t</script>\n\t\t\t\t<script>\n\t\t\t\t\t\t$(function () {\n\t\t\t\t\t\t\t\t$("#main_wrap").urlAutoLink();\n\t\t\t\t\t\t\t/*\t$("#main_wrap a").imgPreview({\n\t\t\t\t\t\t\t\t\t\timgCSS: { width: 200 }\n\t\t\t\t\t\t\t\t});*/\n\t\t\t\t\t\t});\n\t\t\t\t</script>\n\t\t\t\t<script>\n\t\t\t\t\tvar sendMessage = function(t) {\n\t\t\t\t\t\tconsole.log(t);\n\t\t\t\t\t\t$.ajax({\n\t\t\t\t\t\t\turl : \'/user_home\',\n\t\t\t\t\t\t\ttype: \'POST\',\n\t\t\t\t\t\t\tdata: {data: t},\n\t\t\t\t\t\t\tsuccess: function(msg, status){\n\t\t\t\t\t\t\t\t\t$(\'#main_wrap\').prepend("<article><header><b><span>"+"%s"+"</span>("+"00:00"+")</b></header><p>"+t+"</p></article><hr>");\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t})\n\t\t\t\t\t};\n\t\t\t\t\t$(document).ready(function(){\n\t\t\t\t\t\t$("#submit").click(function() {\n\t\t\t\t\t\t\t//rlt = $(\'#f_tweet\').attr(\'value\');\n\t\t\t\t\t\t\t//console.log(rlt);\n\t\t\t\t\t\t\t//alert(rlt);\n\t\t\t\t\t\t\t//alert("submit");\n\t\t\t\t\t\t\tsendMessage($(\'#f_tweet\').attr(\'value\'));\n\t\t\t\t\t\t\t//return false;\n\t\t\t\t\t\t\treturn false;\n\t\t\t\t\t\t});\n\t\t\t\t\t});\n\t\t\t\t\t/*\n\t\t\t\t\t$(\'#form_message\').ajaxForm(function() { \n\t\t\t\t\t\talert("Thank you for your comment!"); \n\t\t\t\t\t});*/\n\t\t\t\t\tchannel = new goog.appengine.Channel("%s");\n\t\t\t\t\tsocket = channel.open();\n\t\t\t\t\tsocket.onopen = function() {\n\t\t\t\t\t\t//alert("open");\n\t\t\t\t\t};\n\t\t\t\t\tsocket.onmessage = function(m) {\n\t\t\t\t\t\t//alert("message");\n\t\t\t\t\t\tinfo = JSON.parse(m.data);\n\t\t\t\t\t\tconsole.log(info.tweet);\n\t\t\t\t\t\tconsole.log(info.author_user_name);\n\t\t\t\t\t\t//$(\'#main_wrap\').prepend("<article><header><b><span styple=\xa5"color: blue;\xa5">"+info.author+"</sapn>"+info.created_t+"</b></header><p>"+info.tweet+"</p></article>");\n\t\t\t\t\t\t$(\'#main_wrap\').prepend("<article><header><b><span>"+info.author_user_name+"</span>("+info.created_t+")</b></header><p>"+info.tweet+"</p></article><hr>");\n\t\t\t\t\t};\n\t\t\t\t\tsocket.onerror = function() {\n\t\t\t\t\t\t//alert("error");\n\t\t\t\t\t\tconsole.log("error");\n\t\t\t\t\t};\n\t\t\t\t\tsocket.onclose = function() {\n\t\t\t\t\t\t//alert("close");\n\t\t\t\t\t\tconsole.log("close");\n\t\t\t\t\t\t};\n\t\t\t\t</script>\n\t\t\t\t<header>\n\t\t\t\t%s\'s home\n\t\t\t\t<a href="%s">\u30ed\u30b0\u30a2\u30a6\u30c8</a>\n\t\t\t\t</header>\n\n\t\t\t\t<div id="container">\n\t\t\t\t\t\t<div id="inner">\n\t\t\t\t\t\t\t\t<div id="top_wrap">\n\t\t\t\t\t\t\t\t\t\t' % (
+        escape(environment.getattr(l_request, 'user')), 
+        escape(l_media_url), 
+        escape(l_media_url), 
+        escape(environment.getattr(l_request, 'user')), 
+        escape(l_token), 
+        escape(environment.getattr(l_request, 'user')), 
+        escape(context.call(l_create_logout_url, url='/')), 
+    )
+    def macro():
+        t_2 = []
+        l_form = context.resolve('form')
+        pass
+        t_2.extend((
+            u'\n\t\t\t\t\t\t\t\t\t\t', 
+            escape(t_1(context.call(environment.getattr(environment.getitem(l_form, 'tweet'), 'errors')))), 
+            u'\n\t\t\t\t\t\t\t\t\t\t<p align="center"><textarea rows="3" cols="60" id="f_tweet" name="tweet" placeholder="\u30c4\u30a4\u30fc\u30c8\u3057\u3066\u304f\u3060\u3055\u3044..."></textarea></p>\n\t\t\t\t\t\t\t\t\t\t', 
+            escape(t_1(context.call(environment.getattr(l_form, 'default_actions'), id='submit'))), 
+            u'\n\t\t\t\t\t\t\t\t\t\t', 
+        ))
+        return Markup(concat(t_2))
+    caller = Macro(environment, macro, None, (), (), False, False, False)
+    yield context.call(l_form, caller=caller)
+    yield u'\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div id="main_wrap">\n\t\t\t\t\t\t\t\t\t\t'
+    l_t = missing
+    for l_t in l_tweets:
+        if 0: yield None
+        yield u'\n\t\t\t\t\t\t\t\t\t\t<article>\n\t\t\t\t\t\t\t\t\t\t<header>\n\t\t\t\t\t\t\t\t\t\t<b><span style="color: blue;">%s</span>(%s)</b>\n\t\t\t\t\t\t\t\t\t\t</header>\n\t\t\t\t\t\t\t\t\t\t<p> %s </p>\n\t\t\t\t\t\t\t\t\t\t</article>\n\t\t\t\t\t\t\t\t\t\t<hr>\n\t\t\t\t\t\t\t\t\t\t' % (
+            escape(environment.getattr(l_t, 'author')), 
+            escape(environment.getattr(l_t, 'created_t')), 
+            escape(environment.getattr(l_t, 'tweet')), 
+        )
+    l_t = missing
+    yield u'\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<footer>\n\t\t\t\t\u03b1\u7248 - \u500b\u4eba\u60c5\u5831\u306f\u63a7\u3048\u3066\u304f\u3060\u3055\u3044\u3002\n\t\t\t\t</footer>\n\t\t</div>\n\n</body>\n</html>\n'
+
+blocks = {}
+debug_info = '1=14&5=15&9=16&10=17&37=18&56=19&79=20&80=21&86=23&87=29&89=31&86=36&90=37&93=39&96=42&98=44&101=47'

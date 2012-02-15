@@ -27,19 +27,25 @@
 						});
 				</script>
 				<script>
-					var sendMessage = function(data) {
+					var sendMessage = function(t) {
+						console.log(t);
 						$.ajax({
 							url : '/user_home',
 							type: 'POST',
-							data: data
+							data: {data: t},
+							success: function(msg, status){
+									$('#main_wrap').prepend("<article><header><b><span>"+"{{ request.user }}"+"</span>("+"00:00"+")</b></header><p>"+t+"</p></article><hr>");
+							}
 						})
 					};
 					$(document).ready(function(){
-						$("#sumbit").click(function() {
-							//$('#text').attr('value').show();
-							console.log("submit");
+						$("#submit").click(function() {
+							//rlt = $('#f_tweet').attr('value');
+							//console.log(rlt);
+							//alert(rlt);
 							//alert("submit");
-							//sendMessage($('#text').attr('value'));
+							sendMessage($('#f_tweet').attr('value'));
+							//return false;
 							return false;
 						});
 					});
@@ -79,9 +85,8 @@
 								<div id="top_wrap">
 										{% call form() %}
 										{{ form['tweet'].errors()|safe }}
-										<!--{{ form['tweet'].label()|safe }}><br-->
-										<textarea rows="3" cols="65" id="f_tweet" name="tweet" placeholder="ツイートしてください..."></textarea>
-										{{ form.default_actions()|safe }}
+										<p align="center"><textarea rows="3" cols="60" id="f_tweet" name="tweet" placeholder="ツイートしてください..."></textarea></p>
+										{{ form.default_actions(id="submit")|safe }}
 										{% endcall %}
 								</div>
 								<div id="main_wrap">

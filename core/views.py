@@ -11,7 +11,6 @@ from google.appengine.ext import db
 from google.appengine.api import (users, memcache, channel)
 from core.models import (MyUser, Tweet, Board)
 from core.forms import (MyInputForm, MyUserForm, FriendsForm)
-#import simplejson
 import logging
 import json
 
@@ -48,6 +47,7 @@ def user_home(request):
 	author_list.append(request.user.key())
 	user_info = MyUser.gql("WHERE user_name = :1",
 							str(request.user)).get()
+	#user_info = MyUser.get_by_key_name(request.user.key())
 	if user_info:
 		# logging.debug('author_list>>%s' % str(user_info.friends) )
 		for f in user_info.friends:
@@ -55,6 +55,7 @@ def user_home(request):
 
 	form = MyInputForm()	
 	if request.method == 'POST':
+		logging.debug('data>>%s' % request.values.get('data') )
 		if form.validate(request.form):
 			# tweet.author is auto-created.
 			if form['tweet'] == '':
@@ -71,8 +72,17 @@ def user_home(request):
 						#logging.debug('send_messaget>>%s' % str(l) )
 						channel.send_message(str(l),message)
 		else:
-			#logging.debug('--send_messaget>>%s' % request.data )
-			pass
+			data = request.values.get('data')
+			if data == None or data == '':
+				pass
+			else:
+				tweet = Tweet(tweet=data)
+				tweet.put()
+				message = get_tweet(tweet)
+				for l in author_list:
+					if l != request.user.key():
+						#logging.debug('send_messaget>>%s' % str(l) )
+						channel.send_message(str(l),message)
 
 		form.reset()
 	elif request.method == 'GET':

@@ -1,0 +1,27 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, TemplateNotFound
+name = '/index.html'
+
+def root(context, environment=environment):
+    l_request = context.resolve('request')
+    l_media_url = context.resolve('media_url')
+    if 0: yield None
+    yield u'<!doctype html>\n<html>\n\t<head>\n\t\t<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\n\t\t<title>ComFam - top page</title>\n\t\t<link rel="stylesheet" type="text/css" href="%s/index.css" media="all"/>\n\t</head>\n\t<body>\n\t\t<header>\n\t\t\t<h1>ComFam</h1>\n\t\t</header>\n\t\t<nav>\n\t\t\t' % (
+        escape(l_media_url), 
+    )
+    included_template = environment.get_template('auth/macros.html', '/index.html').make_module(context.parent, True)
+    l_render_loginbox = getattr(included_template, 'render_loginbox', missing)
+    if l_render_loginbox is missing:
+        l_render_loginbox = environment.undefined("the template %r (imported on line 13 in '/index.html') does not export the requested name 'render_loginbox'" % included_template.__name__, name='render_loginbox')
+    context.vars['render_loginbox'] = l_render_loginbox
+    context.exported_vars.discard('render_loginbox')
+    yield u'\n\t\t\t<div>\n\t\t\t\t'
+    if context.call(environment.getattr(environment.getattr(l_request, 'user'), 'is_anonymous')):
+        if 0: yield None
+        yield u'\n\t\t\t\t\t%s\n\t\t\t\t' % (
+            escape(context.call(l_render_loginbox)), 
+        )
+    yield u'\n\t\t\t</div>\n\t\t\t<a href="/new_user">\u65b0\u898f\u30e6\u30fc\u30b6\u30fc\u767b\u9332</a>\n\t\t</nav>\n\t\t<section>\n\t\t\t<article>\n\t\t\t\t<h2>\u3053\u306e\u30b5\u30a4\u30c8\u306b\u3064\u3044\u3066</h2>\n\t\t\t\t<p>\u9650\u3089\u308c\u305f\u4eba\u305f\u3061\u3068Twitter\u306e\u3088\u3046\u306aCommunication\u3092\u884c\u3046\u305f\u3081\u306e\u30c4\u30fc\u30eb\u3067\u3059\u3002</p>\n\t\t\t</article>\n\t\t</section>\n\t\t<footer>\n\t\t\t<p>This site is licensed under a <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">\n\t\t\t\tCreative Commons Attribution 3.0 License</a></p>\n\t\t</footer>\n\t\t</body>\n</html>\n'
+
+blocks = {}
+debug_info = '1=9&6=10&13=12&15=19&16=22&17=24'

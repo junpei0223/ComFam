@@ -1,0 +1,14 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, TemplateNotFound
+name = '/set_friends.html'
+
+def root(context, environment=environment):
+    l_form = context.resolve('form')
+    t_1 = environment.filters['safe']
+    if 0: yield None
+    yield u'<!doctype html>\n<html>\n\t\t<head>\n\t\t\t\t<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\n\t\t</head>\n\t\t<body>\n\t\t\t\t%s\n\t\t</body>\n</html>' % (
+        escape(t_1(context.call(l_form))), 
+    )
+
+blocks = {}
+debug_info = '1=9&7=10'
